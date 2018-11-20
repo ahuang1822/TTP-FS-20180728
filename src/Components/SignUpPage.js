@@ -1,0 +1,31 @@
+import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
+import { checkEmailAndPassword, signUpWithFirebase } from '../Utils/SignInSignUp';
+import SignUpForm from './SignInForm';
+
+class SignUp extends Component {
+  
+  signUp = (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const inputsEntered = checkEmailAndPassword(email, password);
+
+    if (inputsEntered) {
+      signUpWithFirebase(email, password);
+    };
+  };
+
+  goToSignIn = (event) => {
+    event.preventDefault();
+    browserHistory.push('/');
+  }
+  
+  render() {
+    return (
+      <SignUpForm signUp={this.signUp} goToSignIn={this.goToSignIn} />
+    );
+  };  
+};
+
+export default SignUp;
