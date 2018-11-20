@@ -1,8 +1,58 @@
 import React, { Component } from 'react';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { browserHistory } from 'react-router';
+import { auth } from "../Firebase/firebase";
 
 class Login extends Component {
+
+  login = (event) => {
+    event.preventDefault();    
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const missingEmailMessage = document.getElementById('missing-email-message');
+    const missingPasswordMessage = document.getElementById('missing-password-message');    
+    
+    if (!email && !password) {
+      missingEmailMessage.style.display = 'block';
+      missingPasswordMessage.style.display = 'block';
+      return;
+    }
+
+    if (!email) {
+      missingEmailMessage.style.display = 'block';
+      missingPasswordMessage.style.display = 'none';
+      return;
+    }
+
+    if (!password) {
+      missingPasswordMessage.style.display = 'block';
+      missingEmailMessage.style.display = 'none';
+      return;
+    }
+
+    missingEmailMessage.style.display = 'none';
+    missingPasswordMessage.style.display = 'none';
+
+    const segment = document.getElementById('login-form-segment');
+    const errorMessageNode = document.getElementById('error-message');
+    
+    if (errorMessageNode) {
+      segment.removeChild(errorMessageNode);
+    }
+    
+    auth.signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      console.log('user: ', user)
+    })
+    .catch((error) => {       
+      const errorMessage = error.message;
+      const paragraph = document.createElement("P");
+      paragraph.setAttribute('id', 'error-message');
+      const text = document.createTextNode(errorMessage);
+      paragraph.appendChild(text);     
+      segment.appendChild(paragraph);
+    });
+  }
 
   goToSignUp = (event) => {
     event.preventDefault();
@@ -26,19 +76,22 @@ class Login extends Component {
               <br />
               Please login to your account.
             </Header>
-            <Form size='large'>
-              <Segment stacked>
-                <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' />
+            <Form size='large' onSubmit={this.login}>
+              <Segment stacked id='login-form-segment'>
+                <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' name='email' />
                 <Form.Input
                   fluid
                   icon='lock'
                   iconPosition='left'
                   placeholder='Password'
-                  type='password'
+                  type='password'     
+                  name='password'            
                 />
                 <Button color='teal' fluid size='large'>
                   Login
                 </Button>
+                <p id='missing-email-message'>Please enter an email address</p>
+                <p id='missing-password-message'>Please enter a password</p>
               </Segment>
             </Form>
             <Message>

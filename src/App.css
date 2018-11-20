@@ -3,3 +3,19 @@
   padding: 0;
   color: #00b5ad;
 }
+
+#missing-email-message {
+  color: red;  
+  margin: 0;
+  display: none;
+}
+
+#missing-password-message {
+  color: red;  
+  margin: 0;
+  display: none;
+}
+
+#error-message {
+  color: red;  
+}
