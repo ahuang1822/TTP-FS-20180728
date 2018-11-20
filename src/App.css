@@ -4,6 +4,12 @@
   color: #00b5ad;
 }
 
+#missing-name-message {
+  color: red;  
+  margin: 0;
+  display: none;
+}
+
 #missing-email-message {
   color: red;  
   margin: 0;

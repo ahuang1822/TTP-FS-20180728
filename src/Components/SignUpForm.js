@@ -19,10 +19,16 @@ const SignUpForm = (props) => {
           <Form size='large' onSubmit={props.signUp}>
             <Segment stacked id='signup-form-segment'>
               <Form.Input 
+                fluid icon='address card outline' 
+                iconPosition='left' 
+                placeholder='Name'
+                name='name' 
+              />
+              <Form.Input 
                 fluid icon='user' 
                 iconPosition='left' 
                 placeholder='E-mail address'
-                name='email' 
+                name='email'                 
               />
               <Form.Input
                 fluid
@@ -35,6 +41,7 @@ const SignUpForm = (props) => {
               <Button color='teal' fluid size='large'>
                 Sign Up
               </Button>
+              <p id='missing-name-message'>Please enter a name</p>
               <p id='missing-email-message'>Please enter an email address</p>
               <p id='missing-password-message'>Please enter a password</p>
             </Segment>

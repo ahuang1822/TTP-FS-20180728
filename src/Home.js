@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { Router, browserHistory, Route } from 'react-router';
 import './App.css';
-import SignIn from './Components/SignInPage';
-import SignUp from './Components/SignUpPage';
+import SignInPage from './Components/SignInPage';
+import SignUpPage from './Components/SignUpPage';
 
 
 class App extends Component {
   render() {
     return (
       <Router history={browserHistory}>
-        <Route path="/" component={SignIn} />
-        <Route path="/signup" component={SignUp} />  
+        <Route path="/" component={SignInPage} />
+        <Route path="/signup" component={SignUpPage} />  
       </Router>      
-    )    
+    );    
   };
-}
+};
 
 export default App;

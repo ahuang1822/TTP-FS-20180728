@@ -1,27 +1,32 @@
 import { auth } from "../Firebase/firebase";
 
-export const checkEmailAndPassword = (email, password) => {
+export const checkEmailAndPassword = (name, email, password) => {
+  const missingNameMessage = document.getElementById('missing-name-message');    
   const missingEmailMessage = document.getElementById('missing-email-message');
-  const missingPasswordMessage = document.getElementById('missing-password-message');    
+  const missingPasswordMessage = document.getElementById('missing-password-message');      
   
-  if (!email && !password) {
-    missingEmailMessage.style.display = 'block';
-    missingPasswordMessage.style.display = 'block';
+  if (!name) {
+    missingNameMessage.style.display = 'block';
+    missingEmailMessage.style.display = 'none';
+    missingPasswordMessage.style.display = 'none';
     return;
   }
 
   if (!email) {
+    missingNameMessage.style.display = 'none';
     missingEmailMessage.style.display = 'block';
     missingPasswordMessage.style.display = 'none';
     return;
   }
 
   if (!password) {
-    missingPasswordMessage.style.display = 'block';
+    missingNameMessage.style.display = 'none';
     missingEmailMessage.style.display = 'none';
+    missingPasswordMessage.style.display = 'block';    
     return;
   }
 
+  missingNameMessage.style.display = 'none';
   missingEmailMessage.style.display = 'none';
   missingPasswordMessage.style.display = 'none';
   return true;
@@ -36,7 +41,7 @@ export const signInWithFirebase = (email, password) => {
   };
 
   auth.signInWithEmailAndPassword(email, password)
-  .then((user) => {
+  .then((user) => {    
     console.log('user: ', user)
   })
   .catch((error) => {       
@@ -49,7 +54,7 @@ export const signInWithFirebase = (email, password) => {
   });
 };
 
-export const signUpWithFirebase = (email, password) => {
+export const signUpWithFirebase = (name, email, password) => {
   const segment = document.getElementById('signup-form-segment');
   const errorMessageNode = document.getElementById('error-message');
   
@@ -59,7 +64,8 @@ export const signUpWithFirebase = (email, password) => {
   
   auth.createUserWithEmailAndPassword(email, password)
   .then((user) => {
-    console.log('user: ', user)
+    auth.currentUser.updateProfile({ displayName: name})
+    console.log('user: ', user);
   })
   .catch((error) => {      
     const errorMessage = error.message;
