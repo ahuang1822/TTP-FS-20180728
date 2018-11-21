@@ -1,4 +1,4 @@
-import { auth } from "../Firebase/firebase";
+import { auth, db } from "../Firebase/firebase";
 import { browserHistory } from 'react-router';
 
 export const checkEmailAndPassword = (name, email, password) => {
@@ -65,7 +65,8 @@ export const signUpWithFirebase = (name, email, password) => {
   }
   
   auth.createUserWithEmailAndPassword(email, password)
-  .then((user) => {
+  .then(() => {
+    addUser(email, name);
     auth.currentUser.updateProfile({ displayName: name})
     browserHistory.push('/portfolio');
   })
@@ -78,3 +79,17 @@ export const signUpWithFirebase = (name, email, password) => {
     segment.appendChild(paragraph);
   });
 };
+
+const addUser = (email, name) => {
+  db.collection("users").doc(email).set({
+    email: email,
+    name: name,
+    'account-balance': 5000
+})
+.then(function() {
+    console.log("Document successfully written!");
+})
+.catch(function(error) {
+    console.error("Error writing document: ", error);
+});
+}
