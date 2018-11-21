@@ -72,7 +72,7 @@ export const signUpWithFirebase = (name, email, password) => {
   })
   .catch((error) => {      
     const errorMessage = error.message;
-    const paragraph = document.createElement("P");
+    const paragraph = document.createElement('p');
     paragraph.setAttribute('id', 'error-message');
     const text = document.createTextNode(errorMessage);
     paragraph.appendChild(text);     

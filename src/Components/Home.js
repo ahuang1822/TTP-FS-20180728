@@ -6,22 +6,32 @@ import Portfolio from './Portfolio';
 import StockSearch from './StockSearch';
 
 class Home extends Component {
-  // componentDidMount() {
-  //   if (!auth.currentUser) {
-  //     browserHistory.push('/');
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true
+    };
+  };
+
+  componentDidMount() {
+    if (!auth.currentUser) {
+      browserHistory.push('/');
+    } else {
+      this.setState({
+        loading: false
+      });
+    };
+  }
   
   render() {
-    return (
+    return this.state.loading ? null :
       <div>
         <NavBar />
         <div id="portfolio-page">
           <Portfolio />
           <StockSearch />        
         </div>
-      </div>
-    )    
+      </div>      
   }
 }
 

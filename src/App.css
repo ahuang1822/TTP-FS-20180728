@@ -38,6 +38,10 @@
   color: red;  
 }
 
+.search-result.error{
+  color: red;
+}
+
 #navbar {
   background-color: grey;
   height: 100px;
@@ -87,15 +91,24 @@ h1 {
 
 input {
   display: block;
-  margin: 5px;
+  margin: 5px auto;
 }
 
 #stock-search-form {
   display: block;
   margin: 75px auto;
-  width: 200px;  
+  width: 300px;  
 }
 
 h5 {
   margin: 5px;
+  text-align: center;
+}
+
+.stock-search-input.quantity {
+  display: none;
+}
+
+p {
+  text-align: center;
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { auth } from "../Firebase/firebase";
 import { Button } from 'semantic-ui-react'
 
 const NavBar = () => {  
@@ -7,7 +8,7 @@ const NavBar = () => {
       <div id="navbar-left" />
       <div id="welcome-message">
         <h1>
-        Welcome User
+        Welcome {auth.currentUser.displayName}
         </h1>
       </div> 
       <div id="navbar-buttons">
