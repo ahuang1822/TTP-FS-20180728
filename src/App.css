@@ -22,6 +22,76 @@
   display: none;
 }
 
+#missing-ticker-message {
+  color: red;  
+  margin: 0;
+  display: none;
+}
+
+#missing-quantity-message {
+  color: red;  
+  margin: 0;
+  display: none;
+}
+
 #error-message {
   color: red;  
+}
+
+#navbar {
+  background-color: grey;
+  height: 100px;
+  display: flex;
+}
+
+h1 {  
+  text-align: center;
+}
+
+#welcome-message {
+  margin: auto;
+  padding: 20px 0;
+  flex: 1
+}
+
+#navbar-left {
+  flex: 1;
+}
+
+#navbar-buttons {
+  flex: 1;
+  display: flex;
+}
+
+.ui.button.btn {
+  margin: 0 auto;
+  flex: 1;
+  font-size: 20px;
+  background: grey;
+}
+
+#portfolio-page {
+  display: flex;
+}
+
+#portfolio {
+  flex: 1;
+}
+
+#stock-search {
+  flex: 1;
+  margin: 0 auto;
+  border: #00b5ad;
+  height: 600px;
+}
+
+input {
+  display: block;
+  margin: 5px;
+}
+
+#stock-search-form {
+  display: block;
+  margin: 75px auto;
+  width: 200px;  
 }

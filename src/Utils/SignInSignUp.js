@@ -1,4 +1,5 @@
 import { auth } from "../Firebase/firebase";
+import { browserHistory } from 'react-router';
 
 export const checkEmailAndPassword = (name, email, password) => {
   const missingNameMessage = document.getElementById('missing-name-message');    
@@ -42,7 +43,8 @@ export const signInWithFirebase = (email, password) => {
 
   auth.signInWithEmailAndPassword(email, password)
   .then((user) => {    
-    console.log('user: ', user)
+    console.log('user: ', user);
+    browserHistory.push('/portfolio');
   })
   .catch((error) => {       
     const errorMessage = error.message;
@@ -65,7 +67,7 @@ export const signUpWithFirebase = (name, email, password) => {
   auth.createUserWithEmailAndPassword(email, password)
   .then((user) => {
     auth.currentUser.updateProfile({ displayName: name})
-    console.log('user: ', user);
+    browserHistory.push('/portfolio');
   })
   .catch((error) => {      
     const errorMessage = error.message;

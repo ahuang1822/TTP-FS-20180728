@@ -32,6 +32,7 @@ const SignInForm = (props) => {
               <Button color='teal' fluid size='large'>
                 Sign In
               </Button>
+              <p id='missing-name-message'>Please enter a name</p>
               <p id='missing-email-message'>Please enter an email address</p>
               <p id='missing-password-message'>Please enter a password</p>
             </Segment>

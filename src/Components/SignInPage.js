@@ -9,7 +9,7 @@ class SignIn extends Component {
     event.preventDefault();    
     const email = event.target.email.value;
     const password = event.target.password.value;    
-    const inputsEntered = checkEmailAndPassword(email, password);
+    const inputsEntered = checkEmailAndPassword(true, email, password);
     
     if (inputsEntered) {
       signInWithFirebase(email, password);
