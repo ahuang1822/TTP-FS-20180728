@@ -96,7 +96,7 @@ input {
 
 #stock-search-form {
   display: block;
-  margin: 75px auto;
+  margin: 75px auto 5px;
   width: 300px;  
 }
 
@@ -105,10 +105,28 @@ h5 {
   text-align: center;
 }
 
-.stock-search-input.quantity {
-  display: none;
-}
-
 p {
   text-align: center;
+}
+
+#buy-stock-form {
+  display: none;  
+  text-align: center;
+}
+
+#buy-btn {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#cant-afford-message {
+  display: none;
+  text-align: center;
+  color: red;
+}
+
+#success-buy-message {
+  display: none;
+  text-align: center;
+  color: green;
 }

@@ -84,12 +84,13 @@ const addUser = (email, name) => {
   db.collection("users").doc(email).set({
     email: email,
     name: name,
-    'account-balance': 5000
-})
-.then(function() {
-    console.log("Document successfully written!");
-})
-.catch(function(error) {
-    console.error("Error writing document: ", error);
-});
+    'cash-balance': 5000,
+    'portfolio-value': 0
+  })
+  .then(() => {
+      console.log("Document successfully written!");
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
 }
