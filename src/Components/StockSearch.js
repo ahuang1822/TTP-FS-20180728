@@ -6,7 +6,7 @@ import {
   tickerNotFound,
   checkQuantity,
   canUserAfford,
-  addStockToPortfolio,
+  addStockToTransaction,
   updateAccount } from '../Utils/Stocks';
 import { auth, db } from '../Firebase/firebase';
 
@@ -27,16 +27,17 @@ class StockSearch extends Component {
     const email = auth.currentUser.email;
     const accountRef = db.collection('users').doc(email);
     accountRef.get()
-    .then(doc => {
+    .then((doc) => {
       if (!doc.exists) {
         console.log('No such document!');
       } else {
+        const cashBalance = doc.data()['cash-balance']
+        const portfolioValue = doc.data()['portfolio-value']
         this.setState({
           loading: false,
-          cashBalance: doc.data()['cash-balance'],
-          portfolioValue: doc.data()['portfolio-value']
+          cashBalance: cashBalance.toFixed(2),
+          portfolioValue: portfolioValue.toFixed(2)
         })
-        console.log('Document data:', doc.data());
       }
     })
     .catch(err => {
@@ -76,38 +77,33 @@ class StockSearch extends Component {
   onBuy = async(event) => {
     event.preventDefault();
     const email = auth.currentUser.email;
-    const cashBalance = this.state.cashBalance;
+    const cashBalance = Number(this.state.cashBalance);
     const ticker = this.state.currentTicker
     const price = this.state.currentTickerPrice;
     let quantity = Number(event.target.quantity.value);
     let total = price * quantity;
     const quantityEntered = checkQuantity(quantity);
     if (quantityEntered) {
-      console.log('total: ', total);
-      console.log('cashBalance: ', cashBalance);      
       if (canUserAfford(total, cashBalance)) {        
         const updatedCashBalance = cashBalance - total;        
-        const updatePortfolioValue = this.state.portfolioValue + total;
-        await addStockToPortfolio(email, ticker, quantity, total)            
+        const updatePortfolioValue = Number(this.state.portfolioValue) + total;
+        await addStockToTransaction(email, ticker, quantity, total)            
         await updateAccount(email, updatedCashBalance, updatePortfolioValue);        
         this.setState({
-          cashBalance: updatedCashBalance,
-          portfolioValue: updatePortfolioValue
+          cashBalance: updatedCashBalance.toFixed(2),
+          portfolioValue: updatePortfolioValue.toFixed(2)
         })
       }      
     };    
   };
   
   render() {
-    const cashBalance = this.state.cashBalance.toFixed(2); 
-    const portfolioValue = this.state.portfolioValue.toFixed(2);   
-
     return this.state.loading ? null :  
       <div id='stock-search'>      
         <form id='stock-search-form' onSubmit={this.onSubmit}>
           <label>
-            <h5>Your current cash balance is ${cashBalance}</h5>
-            <h5>Your portfolio value is ${portfolioValue}</h5>
+            <h5>Your current cash balance is ${this.state.cashBalance}</h5>
+            <h5>Your portfolio value is ${this.state.portfolioValue}</h5>
             <h5>Search a ticker to invest in!</h5>                      
             <input className="stock-search-input ticker" type="text" name="ticker" placeholder="Ticker" />                          
           </label>

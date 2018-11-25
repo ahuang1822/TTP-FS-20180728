@@ -4,6 +4,7 @@ import './App.css';
 import SignInPage from './Components/SignInPage';
 import SignUpPage from './Components/SignUpPage';
 import Home from './Components/Home';
+import TransactionsPage from './Components/TransactionsPage'
 
 
 class App extends Component {
@@ -12,7 +13,8 @@ class App extends Component {
       <Router history={browserHistory}>
         <Route path="/" component={SignInPage} />
         <Route path="/signup" component={SignUpPage} />  
-        <Route path="/portfolio" component={Home} />  
+        <Route path="/portfolio" component={Home} />
+        <Route path="/transactions" component={TransactionsPage} />  
       </Router>      
     );    
   };

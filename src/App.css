@@ -130,3 +130,7 @@ p {
   text-align: center;
   color: green;
 }
+
+li {
+  list-style-type: none;
+}

@@ -64,9 +64,9 @@ export const canUserAfford = (total, cashBalance) => {
   return true;
 } 
 
-export const addStockToPortfolio = (email, ticker, quantity, total) => {
+export const addStockToTransaction = (email, ticker, quantity, total) => {
   db
-  .collection("portfolio")
+  .collection("portfolios")
   .doc(email)
   .collection('transactions')
   .doc(Date.now().toString())
@@ -77,7 +77,7 @@ export const addStockToPortfolio = (email, ticker, quantity, total) => {
     date: new Date().toLocaleString()
   })
   .then(() => {
-    console.log("stock added to portfolio!");
+    console.log("stock added to transactions!");
   })
   .catch((error) => {
     console.error("Error writing document: ", error);
