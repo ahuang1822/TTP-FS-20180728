@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import NavBar from './NavBar';
-import { browserHistory } from 'react-router';
 import { auth, db } from "../Firebase/firebase";
+import { getTransaction } from '../Utils/Stocks'; 
 
 class Transcations extends Component {
   constructor(props) {
@@ -12,22 +11,12 @@ class Transcations extends Component {
     };
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
     const email = auth.currentUser.email;
-    const transactionsRef = db.collection('portfolios').doc(email).collection('transactions');
-    transactionsRef.get()
-    .then((collection) => {
-      const listOfTranscations = [];
-      collection.forEach((transaction) => {
-        listOfTranscations.push(transaction.data());
-      })
-      this.setState(({
-        loading: false,
-        transactions: listOfTranscations
-      }))
-    })
-    .catch((error) => {
-      console.log(error);
+    const listOfTranscations = await getTransaction(email);
+    this.setState({
+      loading: false,
+      transactions: listOfTranscations
     });
   }; 
   

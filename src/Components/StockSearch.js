@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { 
-  checkTicker, 
+  checkTicker,
+  getAccountInfo, 
   searchStock, 
   tickerFound, 
   tickerNotFound,
@@ -23,29 +24,17 @@ class StockSearch extends Component {
     };
   };
   
-  componentDidMount() {
+  componentDidMount = async () => {
     const email = auth.currentUser.email;
-    const accountRef = db.collection('users').doc(email);
-    accountRef.get()
-    .then((doc) => {
-      if (!doc.exists) {
-        console.log('No such document!');
-      } else {
-        const cashBalance = doc.data()['cash-balance']
-        const portfolioValue = doc.data()['portfolio-value']
-        this.setState({
-          loading: false,
-          cashBalance: cashBalance.toFixed(2),
-          portfolioValue: portfolioValue.toFixed(2)
-        })
-      }
-    })
-    .catch(err => {
-      console.log('Error getting document', err);
+    const accountInfo = await getAccountInfo(email);
+    this.setState({
+      loading: false,
+      cashBalance: accountInfo.cashBalance,
+      portfolioValue: accountInfo.portfolioValue
     });
-  }
+  };
   
-  onSubmit = async(event) => {
+  onSubmit = async (event) => {
     event.preventDefault();
     const ticker = event.target.ticker.value;
     let stockData;
@@ -74,7 +63,7 @@ class StockSearch extends Component {
     };     
   };
 
-  onBuy = async(event) => {
+  onBuy = async (event) => {
     event.preventDefault();
     const email = auth.currentUser.email;
     const cashBalance = Number(this.state.cashBalance);

@@ -21,6 +21,25 @@ export const checkQuantity = (quantity) => {
   return true;
 };
 
+export const getAccountInfo = async (email) => {
+  const accountRef = db.collection('users').doc(email);
+  try {
+    const accountDoc = await accountRef.get()
+    if (!accountDoc.exists) {
+      console.log('No such document!');
+    } else {
+      const cashBalance = accountDoc.data()['cash-balance']
+      const portfolioValue = accountDoc.data()['portfolio-value']
+      return {
+        cashBalance: cashBalance.toFixed(2),
+        portfolioValue: portfolioValue.toFixed(2)
+      };
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const searchStock = async(ticker) => {
   const IEX_API_PREFI = 'https://api.iextrading.com/1.0/stock/';    
   let stockData;
@@ -32,7 +51,7 @@ export const searchStock = async(ticker) => {
       symbol: stockData.symbol,
       latestPrice: stockData.latestPrice,      
     }
-  } catch(error) {
+  } catch (error) {
     return {
       tickerFound: false,
       ticker: ticker
@@ -98,4 +117,18 @@ export const updateAccount = (email, cashBalance, portfolioValue) => {
   .catch((error) => {
     console.error("Error writing document: ", error);
   })
+}
+
+export const getTransaction = async(email) => {
+  const transactionsRef = db.collection('portfolios').doc(email).collection('transactions');
+  try {
+    const transactions = await transactionsRef.get()
+    const listOfTranscations = [];
+    transactions.forEach((transaction) => {
+      listOfTranscations.push(transaction.data());    
+    });
+    return listOfTranscations;
+  } catch (error) {
+    console.log(error);
+  }
 }
