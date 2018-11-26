@@ -2,34 +2,42 @@ import React, { Component } from 'react';
 import NavBar from './NavBar';
 import { browserHistory } from 'react-router';
 import Transactions from './Transactions'
+import { auth } from "../Firebase/firebase";
 
 class TransactionsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
-      displayName: ''
+      loading: true,      
     };
   };
 
-  componentDidMount() {
-    const email = window.sessionStorage.getItem("email");
-    const displayName = window.sessionStorage.getItem("displayName");
-    console.log('HOME EMAIL: ', email)
-    if (!email) {      
-      browserHistory.push('/');
-    } else {
-      this.setState({
-        loading: false,
-        displayName: displayName
-      });
-    };
-  }
+  _isMounted = false;
   
+  componentDidMount() {    
+    this._isMounted = true;    
+    auth.onAuthStateChanged((user) => {      
+      if (user) {
+        if (this._isMounted) {
+          this.setState({
+            loading: false,
+            currentUser: user
+          })
+        }        
+      } else {
+        browserHistory.push('/');
+      }
+    })       
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
     return this.state.loading ? null :
       <div>
-        <NavBar page="transaction" displayName={this.state.displayName}/>
+      <NavBar page="transaction" currentUser={this.state.currentUser}/>
         <div id="portfolio-page">
           <Transactions />        
         </div>

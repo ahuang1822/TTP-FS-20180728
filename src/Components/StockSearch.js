@@ -25,9 +25,8 @@ class StockSearch extends Component {
     };
   };
   
-  componentDidMount = async () => {
-    const email = window.sessionStorage.getItem("email");;
-    const accountInfo = await getAccountInfo(email);
+  componentDidMount = async () => {    
+    const accountInfo = await getAccountInfo(auth.currentUser.email);
     this.setState({
       loading: false,
       cashBalance: accountInfo.cashBalance,

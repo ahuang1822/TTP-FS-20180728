@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { getPortfolio } from '../Utils/Stocks';
+import { auth } from '../Firebase/firebase';
 
 class Portfolio extends Component {
   constructor(props) {
     super(props);
     this.state = {      
       loading: true,
-      portfolio: []
     };
   }
 
   componentDidMount = async () => {
-    // const email = auth.currentUser.email;
-    const email = window.sessionStorage.getItem("email");    
+    const email = auth.currentUser.email;    
     const portfolio = await getPortfolio(email);
-    // console.log('portfolio: ', portfolio)
     this.setState({ 
       portfolio: portfolio, 
       loading: false 
@@ -32,8 +30,7 @@ class Portfolio extends Component {
           <div className="portfolio-stock" key={index}>          
             <p className={performance + ' portfolio-stock-info'}>{stock.ticker} - {stock.quantity} shares</p>
             <p className={performance + ' portfolio-stock-info'}>${stock.totalValue}</p>
-          </div>
-          
+          </div>          
         )
       })}
     </div>    

@@ -42,13 +42,8 @@ export const signInWithFirebase = (email, password) => {
   };
 
   auth.signInWithEmailAndPassword(email, password)
-  .then((user) => {    
-    console.log('user: ', user.user.displayName);
-    window.sessionStorage.setItem("email", email)
-    window.sessionStorage.setItem("displayName", user.user.displayName);
-    setTimeout(() => {
-      browserHistory.push('/portfolio');        
-    }, 0); 
+  .then(() => {    
+    browserHistory.push('/portfolio');        
   })
   .catch((error) => {       
     const errorMessage = error.message;
@@ -71,7 +66,7 @@ export const signUpWithFirebase = (name, email, password) => {
   auth.createUserWithEmailAndPassword(email, password)
   .then(() => {
     addUser(email, name);
-    auth.currentUser.updateProfile({ displayName: name})
+    auth.currentUser.updateProfile({ displayName: name })
     browserHistory.push('/portfolio');
   })
   .catch((error) => {      
