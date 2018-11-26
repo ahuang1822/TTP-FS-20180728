@@ -49,7 +49,8 @@ export const searchStock = async(ticker) => {
     return {
       tickerFound: true,
       symbol: stockData.symbol,
-      latestPrice: stockData.latestPrice,      
+      latestPrice: stockData.latestPrice.toFixed(2),
+      openPrice: stockData.open      
     }
   } catch (error) {
     return {
@@ -83,52 +84,117 @@ export const canUserAfford = (total, cashBalance) => {
   return true;
 } 
 
-export const addStockToTransaction = (email, ticker, quantity, total) => {
-  db
-  .collection("portfolios")
-  .doc(email)
-  .collection('transactions')
-  .doc(Date.now().toString())
-  .set({
-    ticker: ticker,
-    shares: quantity,
-    total: total,
-    date: new Date().toLocaleString()
-  })
-  .then(() => {
+export const addStockToTransaction = async (email, ticker, quantity, total) => {
+  try {
+    await db
+    .collection("portfolios")
+    .doc(email)
+    .collection('transactions')
+    .doc(Date.now().toString())
+    .set({
+      ticker: ticker,
+      shares: quantity,
+      total: total,
+      date: new Date().toLocaleString()
+    });
     console.log("stock added to transactions!");
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error("Error writing document: ", error);
-  })  
-}
+  };
+};
 
-export const updateAccount = (email, cashBalance, portfolioValue) => {
-  db
-  .collection('users')
-  .doc(email)
-  .set({
-    'cash-balance': cashBalance,
-    'portfolio-value': portfolioValue
-  })
-  .then(() => {
-    console.log('cash balance updated')
-  })
-  .catch((error) => {
+export const updateAccount = async (email, cashBalance, portfolioValue) => {
+  try {
+    await db
+    .collection('users')
+    .doc(email)
+    .set({
+      'cash-balance': cashBalance,
+      'portfolio-value': portfolioValue
+    })
+    console.log('cash balance updated');
+  } catch (error) {
     console.error("Error writing document: ", error);
-  })
-}
+  };  
+};
 
-export const getTransaction = async(email) => {
+export const getTransaction = async (email) => {
   const transactionsRef = db.collection('portfolios').doc(email).collection('transactions');
   try {
     const transactions = await transactionsRef.get()
     const listOfTranscations = [];
     transactions.forEach((transaction) => {
-      listOfTranscations.push(transaction.data());    
+      listOfTranscations.push({
+        ticker: transaction.data().ticker,
+        shares: transaction.data().shares,
+        total: transaction.data().total.toFixed(2),
+        date: transaction.data().date
+      });    
     });
     return listOfTranscations;
   } catch (error) {
-    console.log(error);
+    console.error('Error getting transactions: ', error);
   }
 }
+
+export const addStockToPortfolio = async (email, ticker, quantity) => {
+  try {
+    const stockInPortfolio = await getStockFromPortfolio(email, ticker);  
+    if (stockInPortfolio) {
+      quantity += stockInPortfolio.quantity;
+    }
+    await db
+    .collection('portfolios')
+    .doc(email)
+    .collection('portfolio')
+    .doc(ticker)
+    .set({
+      quantity: quantity
+    })
+    console.log('quantity updated');
+  } catch (error) {
+    console.error('Error updating quantity: ', error);
+  };  
+};
+
+export const getStockFromPortfolio = async (email, ticker) => {
+  const stockRef = db.collection('portfolios').doc(email).collection('portfolio').doc(ticker);
+  try {
+    const stockDoc = await stockRef.get();
+    if (!stockDoc.exists) return false;
+    return {
+      quantity: stockDoc.data().quantity      
+    }
+  } catch (error) {
+    console.error('Error getting stock from portfolio: ', error);
+  };
+};
+
+export const getPortfolio = async (email) => {
+  const portfolioRef = db.collection('portfolios').doc(email).collection('portfolio');
+  try {
+    const portfolio = await portfolioRef.get();
+    const stocksInPortfolio = [];
+    portfolio.forEach((stock) => {
+      stocksInPortfolio.push({
+        ticker: stock.id,
+        quantity: stock.data().quantity,
+      });    
+    });
+    const stocksInPortfolioValue = [];
+    for (const stock of stocksInPortfolio) {
+      const stockInfo = await searchStock(stock.ticker);
+      stocksInPortfolioValue.push({
+        ticker: stock.ticker,
+        quantity: stock.quantity,
+        totalValue: (stock.quantity * stockInfo.latestPrice).toFixed(2),
+        latestPrice: stockInfo.latestPrice,
+        openPrice: stockInfo.openPrice
+      })        
+    }    
+    return stocksInPortfolioValue;   
+  } catch (error) {
+    console.error('Error getting portfolio: ', error);
+  };
+}
+

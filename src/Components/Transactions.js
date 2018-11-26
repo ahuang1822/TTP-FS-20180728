@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { auth, db } from "../Firebase/firebase";
+import { auth } from "../Firebase/firebase";
 import { getTransaction } from '../Utils/Stocks'; 
 
 class Transcations extends Component {
@@ -21,7 +21,7 @@ class Transcations extends Component {
   }; 
   
   render() {    
-    return this.state.loading ? null :
+    return this.state.loading ? <div /> :
       <div>
         <ol>
           {this.state.transactions.map((transaction, index) => {

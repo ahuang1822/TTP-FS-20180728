@@ -8,8 +8,9 @@ import {
   checkQuantity,
   canUserAfford,
   addStockToTransaction,
-  updateAccount } from '../Utils/Stocks';
-import { auth, db } from '../Firebase/firebase';
+  updateAccount,
+  addStockToPortfolio } from '../Utils/Stocks';
+import { auth } from '../Firebase/firebase';
 
 class StockSearch extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class StockSearch extends Component {
         setTimeout(() => {
           this.setState({
             currentTicker: stockData.symbol,
-            currentTickerPrice: stockData.latestPrice,
+            currentTickerPrice: Number(stockData.latestPrice),
             displayMessage: `${stockData.symbol} is current trading at $${stockData.latestPrice}`
           }, tickerFound)
         }, 0);
@@ -78,6 +79,7 @@ class StockSearch extends Component {
         const updatePortfolioValue = Number(this.state.portfolioValue) + total;
         await addStockToTransaction(email, ticker, quantity, total)            
         await updateAccount(email, updatedCashBalance, updatePortfolioValue);        
+        await addStockToPortfolio(email, ticker, quantity);
         this.setState({
           cashBalance: updatedCashBalance.toFixed(2),
           portfolioValue: updatePortfolioValue.toFixed(2)
