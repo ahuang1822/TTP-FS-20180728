@@ -80,17 +80,16 @@ export const signUpWithFirebase = (name, email, password) => {
   });
 };
 
-const addUser = (email, name) => {
-  db.collection("users").doc(email).set({
+const addUser = async (email, name) => {
+  try {
+    await db.collection("users").doc(email).set({
     email: email,
     name: name,
     'cash-balance': 5000,
     'portfolio-value': 0
-  })
-  .then(() => {
-      console.log("Document successfully written!");
-  })
-  .catch((error) => {
-      console.error("Error writing document: ", error);
-  });
+    })
+    console.log("Document successfully written!");
+  } catch (error) {
+    console.log(error);
+  }  
 }

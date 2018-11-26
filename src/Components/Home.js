@@ -26,7 +26,7 @@ class Home extends Component {
   render() {
     return this.state.loading ? null :
       <div>
-        <NavBar />
+        <NavBar page="stock-search"/>
         <div id="portfolio-page">
           <Portfolio />
           <StockSearch />        

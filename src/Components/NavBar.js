@@ -6,12 +6,24 @@ import { browserHistory } from 'react-router';
 const goToTransactions = () => {
   browserHistory.push('/transactions');
 }
-const NavBar = (page) => {  
-  // let leftBtn;
-  // if (page === 'Transaction') {
-  //   leftBtn  = <Button className="btn" onClick={goToTransactions}>Transactions</Button> 
-  // }
-  // leftBtn = <Button className="btn" onClick={goToTransactions}>Transactions</Button>
+
+const goToStockSearch = () => {
+  browserHistory.push('/portfolio')
+}
+
+const signOut = async () => {
+  await auth.signOut();
+  browserHistory.push('/');
+}
+
+const NavBar = (props) => {    
+  let leftBtn;
+  if (props.page === 'transaction') {
+    leftBtn  = <Button className="btn" onClick={goToStockSearch}>Portfolio</Button> 
+  } else {
+    leftBtn = <Button className="btn" onClick={goToTransactions}>Transactions</Button>
+  }
+  
   return (
     <div id="navbar">
       <div id="navbar-left" />
@@ -21,8 +33,8 @@ const NavBar = (page) => {
         </h1>
       </div> 
       <div id="navbar-buttons">
-        <Button className="btn" onClick={goToTransactions}>Transactions</Button>
-        <Button className="btn">Sign Out</Button>
+        { leftBtn }
+        <Button className="btn" onClick={signOut}>Sign Out</Button>
       </div>                  
     </div>
   )

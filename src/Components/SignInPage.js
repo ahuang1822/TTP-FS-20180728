@@ -19,7 +19,7 @@ class SignIn extends Component {
   goToSignUp = (event) => {
     event.preventDefault();
     browserHistory.push('/signup');
-  }
+  };
 
   render() {
     return (

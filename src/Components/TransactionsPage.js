@@ -25,7 +25,7 @@ class TransactionsPage extends Component {
   render() {
     return this.state.loading ? null :
       <div>
-        <NavBar />
+        <NavBar page="transaction"/>
         <div id="portfolio-page">
           <Transactions />        
         </div>
