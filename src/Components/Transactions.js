@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { auth } from "../Firebase/firebase";
 import { getTransaction } from '../Utils/Stocks'; 
 
 class Transcations extends Component {
@@ -12,7 +11,7 @@ class Transcations extends Component {
   };
 
   componentDidMount = async () => {
-    const email = auth.currentUser.email;
+    const email = window.sessionStorage.getItem("email");
     const listOfTranscations = await getTransaction(email);
     this.setState({
       loading: false,

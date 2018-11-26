@@ -64,7 +64,7 @@ export const tickerFound = () => {
   const buyStockFeature = document.getElementById('buy-stock-form');
   const displayMessage = document.getElementById('display-message');
   buyStockFeature.style.display = 'block';  
-  displayMessage.style.color = 'green';
+  displayMessage.style.color = 'green';  
 };
 
 export const tickerNotFound = () => {

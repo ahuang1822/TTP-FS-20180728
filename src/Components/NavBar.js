@@ -29,7 +29,7 @@ const NavBar = (props) => {
       <div id="navbar-left" />
       <div id="welcome-message">
         <h1>
-        Welcome {auth.currentUser.displayName}
+        Welcome { props.displayName }
         </h1>
       </div> 
       <div id="navbar-buttons">

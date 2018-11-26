@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { getPortfolio } from '../Utils/Stocks';
-import { auth } from '../Firebase/firebase';
 
 class Portfolio extends Component {
   constructor(props) {
@@ -12,7 +11,8 @@ class Portfolio extends Component {
   }
 
   componentDidMount = async () => {
-    const email = auth.currentUser.email;
+    // const email = auth.currentUser.email;
+    const email = window.sessionStorage.getItem("email");    
     const portfolio = await getPortfolio(email);
     // console.log('portfolio: ', portfolio)
     this.setState({ 
@@ -29,9 +29,9 @@ class Portfolio extends Component {
         if (stock.latestPrice > stock.openPrice) performance = 'increase';  
         if (stock.latestPrice < stock.openPrice) performance = 'decrease';  
         return (
-          <div className="portfolio-stock">          
-          <p className={performance + ' portfolio-stock-info'}>{stock.ticker} - {stock.quantity} shares</p>
-          <p className={performance + ' portfolio-stock-info'}>${stock.totalValue}</p>
+          <div className="portfolio-stock" key={index}>          
+            <p className={performance + ' portfolio-stock-info'}>{stock.ticker} - {stock.quantity} shares</p>
+            <p className={performance + ' portfolio-stock-info'}>${stock.totalValue}</p>
           </div>
           
         )

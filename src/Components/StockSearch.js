@@ -21,12 +21,12 @@ class StockSearch extends Component {
       portfolioValue: 0,
       currentTicker: '',
       currentTickerPrice: 0,
-      displayMessage: ''
+      displayMessage: '',
     };
   };
   
   componentDidMount = async () => {
-    const email = auth.currentUser.email;
+    const email = window.sessionStorage.getItem("email");;
     const accountInfo = await getAccountInfo(email);
     this.setState({
       loading: false,
@@ -39,19 +39,19 @@ class StockSearch extends Component {
     event.preventDefault();
     const ticker = event.target.ticker.value;
     let stockData;
-    
+    if (this.state.intervalID) {
+      clearInterval(this.state.intervalID);
+    }
     const tickerEntered = checkTicker(ticker);
     if (tickerEntered) {
       stockData = await searchStock(ticker); 
            
       if (stockData.tickerFound) {
-        setTimeout(() => {
-          this.setState({
-            currentTicker: stockData.symbol,
-            currentTickerPrice: Number(stockData.latestPrice),
-            displayMessage: `${stockData.symbol} is current trading at $${stockData.latestPrice}`
-          }, tickerFound)
-        }, 0);
+        this.setState({
+          currentTicker: stockData.symbol,
+          currentTickerPrice: Number(stockData.latestPrice),
+          displayMessage: `${stockData.symbol} is current trading at $${stockData.latestPrice}`
+        }, tickerFound)
       };
   
       if (!stockData.tickerFound) {
@@ -66,6 +66,9 @@ class StockSearch extends Component {
 
   onBuy = async (event) => {
     event.preventDefault();
+    if (this.state.intervalID) {
+      clearInterval(this.state.intervalID);    
+    }
     const email = auth.currentUser.email;
     const cashBalance = Number(this.state.cashBalance);
     const ticker = this.state.currentTicker
@@ -79,7 +82,7 @@ class StockSearch extends Component {
         const updatePortfolioValue = Number(this.state.portfolioValue) + total;
         await addStockToTransaction(email, ticker, quantity, total)            
         await updateAccount(email, updatedCashBalance, updatePortfolioValue);        
-        await addStockToPortfolio(email, ticker, quantity);
+        await addStockToPortfolio(email, ticker, quantity)
         this.setState({
           cashBalance: updatedCashBalance.toFixed(2),
           portfolioValue: updatePortfolioValue.toFixed(2)

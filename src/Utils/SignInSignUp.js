@@ -43,8 +43,12 @@ export const signInWithFirebase = (email, password) => {
 
   auth.signInWithEmailAndPassword(email, password)
   .then((user) => {    
-    console.log('user: ', user);
-    browserHistory.push('/portfolio');
+    console.log('user: ', user.user.displayName);
+    window.sessionStorage.setItem("email", email)
+    window.sessionStorage.setItem("displayName", user.user.displayName);
+    setTimeout(() => {
+      browserHistory.push('/portfolio');        
+    }, 0); 
   })
   .catch((error) => {       
     const errorMessage = error.message;
