@@ -227,3 +227,10 @@ Header {
   display: none;
   margin: 100px auto 5px;
 }
+
+.transaction-item {  
+  border-bottom-style: solid;
+  border-bottom-color: #5EC37C;
+  padding: 5px;
+  padding-bottom: 10px;
+}

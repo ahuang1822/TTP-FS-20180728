@@ -25,7 +25,7 @@ class Transcations extends Component {
         <ol>
           {this.state.transactions.map((transaction, index) => {
             return (
-              <li key={index}>BUY ({transaction.ticker}) - {transaction.shares} shares - ${transaction.total} - {transaction.date}</li> 
+              <li className="transaction-item" key={index}>BUY ({transaction.ticker}) - {transaction.shares} shares - ${transaction.total} - {transaction.date}</li> 
               )           
           })}
         </ol>        
