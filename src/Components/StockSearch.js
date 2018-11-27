@@ -7,6 +7,7 @@ import {
   tickerNotFound,
   checkQuantity,
   canUserAfford,
+  purchaseLoading,
   successPurchase,
   addStockToTransaction,
   updateAccount,
@@ -20,7 +21,6 @@ class StockSearch extends Component {
     this.state = {
       loading: true,
       cashBalance: 0,
-      portfolioValue: 0,
       currentTicker: '',
       currentTickerPrice: 0,
       displayMessage: '',
@@ -28,12 +28,13 @@ class StockSearch extends Component {
   };
   
   componentDidMount = async () => {    
-    const accountInfo = await getAccountInfo(auth.currentUser.email);
-    this.setState({
-      loading: false,
-      cashBalance: accountInfo.cashBalance,
-      portfolioValue: accountInfo.portfolioValue
-    });
+    getAccountInfo(auth.currentUser.email)
+    .then((accountInfo) => {
+      this.setState({
+        loading: false,
+        cashBalance: accountInfo.cashBalance,
+      });
+    });    
   };
   
   onSubmit = async (event) => {
@@ -65,8 +66,7 @@ class StockSearch extends Component {
   };
 
   onBuy = async (event) => {
-    event.preventDefault();
-    console.log('this.props.refresh: ', this.props.refreshComponent)    
+    event.preventDefault();    
     if (this.state.intervalID) {
       clearInterval(this.state.intervalID);    
     }
@@ -80,14 +80,13 @@ class StockSearch extends Component {
     if (quantityEntered) {
       if (canUserAfford(total, cashBalance)) {        
         const updatedCashBalance = cashBalance - total;        
-        const updatePortfolioValue = Number(this.state.portfolioValue) + total;
+        purchaseLoading();
         await addStockToTransaction(email, ticker, quantity, total)            
-        await updateAccount(email, updatedCashBalance, updatePortfolioValue);        
+        await updateAccount(email, updatedCashBalance);        
         await addStockToPortfolio(email, ticker, quantity)
         successPurchase();
         this.setState({
           cashBalance: updatedCashBalance.toFixed(2),
-          portfolioValue: updatePortfolioValue.toFixed(2)
         })
       }      
     };    
@@ -121,6 +120,7 @@ class StockSearch extends Component {
           account to buy that many shares of {this.state.currentTicker}</p>
           <p id='success-buy-message'>Your puchase of {this.state.currentTicker} stock is successful!</p>
           <button className="submit-btn" id="refresh-btn" onClick={this.refreshStockSearch}>Search another stock!</button>
+          <Loader id="portfolio" id="purchase-loader"className="loader" active inline='centered' />
       </div>  
   }
 }

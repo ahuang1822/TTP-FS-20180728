@@ -222,3 +222,8 @@ li {
 Header {
   color: #5EC37C;
 }
+
+#purchase-loader {
+  display: none;
+  margin: 100px auto 5px;
+}

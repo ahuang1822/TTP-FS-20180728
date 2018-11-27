@@ -26,40 +26,17 @@ export const getAccountInfo = async (email) => {
   try {
     const accountDoc = await accountRef.get()
     if (!accountDoc.exists) {
-      console.log('No such document!');
+      console.error('No such document!');
     } else {
       const cashBalance = accountDoc.data()['cash-balance']
-      const portfolioValue = accountDoc.data()['portfolio-value']
       return {
-        cashBalance: cashBalance.toFixed(2),
-        portfolioValue: portfolioValue.toFixed(2)
+        cashBalance: cashBalance.toFixed(2)        
       };
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
-
-// export const getAccountInfo = (email) => {
-//   const accountRef = db.collection('users').doc(email);
-//   accountRef.get()
-//   .then((accountDoc) => {
-//     if (!accountDoc.exists) {
-//       console.log('No such document!');
-//     } else {
-//       console.log('accuntdocdat: ', accountDoc.data())
-//       const cashBalance = accountDoc.data()['cash-balance']
-//       const portfolioValue = accountDoc.data()['portfolio-value']
-//       return {
-//         cashBalance: cashBalance.toFixed(2),
-//         portfolioValue: portfolioValue.toFixed(2)
-//       };
-//     };
-//   })
-//   .catch((error) => {
-//     console.error('Error getting account info: ', error);
-//   })
-// }
 
 export const searchStock = async(ticker) => {
   const IEX_API_PREFI = 'https://api.iextrading.com/1.0/stock/';    
@@ -105,18 +82,28 @@ export const canUserAfford = (total, cashBalance) => {
   return true;
 } 
 
-export const successPurchase = () => {
-  const successPurchaseMessage = document.getElementById('success-buy-message');
+export const purchaseLoading = () => {
   const stockSearchFrom = document.getElementById('stock-search-form');
   const buySearchFrom = document.getElementById('buy-stock-form');
-  const refreshButton = document.getElementById('refresh-btn');
-  const stockSearchInput = document.getElementById('stock-search-input');
+  const stockSearchInput = document.getElementById('stock-search-input');  
+  const purchaseLoader = document.getElementById('purchase-loader');
 
   stockSearchFrom.style.display = 'none';
   buySearchFrom.style.display = 'none';
+  stockSearchInput.value = '';
+  purchaseLoader.style.display = 'block';
+
+}
+
+export const successPurchase = () => {
+  const successPurchaseMessage = document.getElementById('success-buy-message');  
+  const refreshButton = document.getElementById('refresh-btn');
+  const purchaseLoader = document.getElementById('purchase-loader');  
+  
+  purchaseLoader.style.display = 'none';
   successPurchaseMessage.style.display = 'block';
   refreshButton.style.display = 'block';
-  stockSearchInput.value = '';
+  
 }
 
 export const addStockToTransaction = async (email, ticker, quantity, total) => {
@@ -132,22 +119,19 @@ export const addStockToTransaction = async (email, ticker, quantity, total) => {
       total: total,
       date: new Date().toLocaleString()
     });
-    console.log("stock added to transactions!");
   } catch (error) {
     console.error("Error writing document: ", error);
   };
 };
 
-export const updateAccount = async (email, cashBalance, portfolioValue) => {
+export const updateAccount = async (email, cashBalance) => {
   try {
     await db
     .collection('users')
     .doc(email)
     .set({
-      'cash-balance': cashBalance,
-      'portfolio-value': portfolioValue
+      'cash-balance': cashBalance
     })
-    console.log('cash balance updated');
   } catch (error) {
     console.error("Error writing document: ", error);
   };  
@@ -196,7 +180,6 @@ export const addStockToPortfolio = async (email, ticker, quantity) => {
     .set({
       quantity: quantity
     })
-    console.log('quantity updated');
   } catch (error) {
     console.error('Error updating quantity: ', error);
   };  
