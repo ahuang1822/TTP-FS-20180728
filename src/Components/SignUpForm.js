@@ -14,7 +14,7 @@ const SignUpForm = (props) => {
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as='h2' textAlign='center'>
-            Please sign up with an email and password.
+            Please sign up with your name, email and password.
           </Header>
           <Form size='large' onSubmit={props.signUp}>
             <Segment stacked id='signup-form-segment'>
