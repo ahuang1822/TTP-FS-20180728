@@ -32,7 +32,7 @@ class StockSearch extends Component {
     .then((accountInfo) => {
       this.setState({
         loading: false,
-        cashBalance: accountInfo.cashBalance,
+        cashBalance: accountInfo.cashBalance || 5000,
       });
     });    
   };
@@ -120,7 +120,7 @@ class StockSearch extends Component {
           account to buy that many shares of {this.state.currentTicker}</p>
           <p id='success-buy-message'>Your puchase of {this.state.currentTicker} stock is successful!</p>
           <button className="submit-btn" id="refresh-btn" onClick={this.refreshStockSearch}>Search another stock!</button>
-          <Loader id="portfolio" id="purchase-loader"className="loader" active inline='centered' />
+          <Loader id="purchase-loader" className="loader" active inline='centered' />
       </div>  
   }
 }

@@ -64,8 +64,8 @@ export const signUpWithFirebase = (name, email, password) => {
   }
   
   auth.createUserWithEmailAndPassword(email, password)
-  .then(() => {
-    addUser(email, name);
+  .then(async () => {
+    await addUser(email, name);
     auth.currentUser.updateProfile({ displayName: name })
     browserHistory.push('/portfolio');
   })
@@ -87,8 +87,7 @@ const addUser = async (email, name) => {
     'cash-balance': 5000,
     'portfolio-value': 0
     })
-    console.log("Document successfully written!");
   } catch (error) {
-    console.log(error);
+    console.error('Error adding user: ', error);
   }  
 }

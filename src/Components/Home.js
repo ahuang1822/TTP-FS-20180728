@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router';
 import { auth } from "../Firebase/firebase";
 import Portfolio from './Portfolio';
 import StockSearch from './StockSearch';
-import { Loader } from 'semantic-ui-react'
 
 class Home extends Component {
   constructor(props) {
@@ -42,6 +41,7 @@ class Home extends Component {
   };
 
   render() {    
+    console.log('currentUSer: ', this.state.currentUser)
     return this.state.loading ? null :
       <div>
         <NavBar page="stock-search" currentUser={this.state.currentUser}/>
