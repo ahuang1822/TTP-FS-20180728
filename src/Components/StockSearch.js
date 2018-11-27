@@ -7,10 +7,12 @@ import {
   tickerNotFound,
   checkQuantity,
   canUserAfford,
+  successPurchase,
   addStockToTransaction,
   updateAccount,
   addStockToPortfolio } from '../Utils/Stocks';
 import { auth } from '../Firebase/firebase';
+import { Loader } from 'semantic-ui-react'
 
 class StockSearch extends Component {
   constructor(props) {
@@ -43,8 +45,7 @@ class StockSearch extends Component {
     }
     const tickerEntered = checkTicker(ticker);
     if (tickerEntered) {
-      stockData = await searchStock(ticker); 
-           
+      stockData = await searchStock(ticker);                  
       if (stockData.tickerFound) {
         this.setState({
           currentTicker: stockData.symbol,
@@ -59,12 +60,13 @@ class StockSearch extends Component {
           currentTickerPrice: 0,
           displayMessage: `No result found for ticker ${stockData.symbol}. Please try a different ticker.`
         }, tickerNotFound)                
-      };
+      };      
     };     
   };
 
   onBuy = async (event) => {
     event.preventDefault();
+    console.log('this.props.refresh: ', this.props.refreshComponent)    
     if (this.state.intervalID) {
       clearInterval(this.state.intervalID);    
     }
@@ -82,6 +84,7 @@ class StockSearch extends Component {
         await addStockToTransaction(email, ticker, quantity, total)            
         await updateAccount(email, updatedCashBalance, updatePortfolioValue);        
         await addStockToPortfolio(email, ticker, quantity)
+        successPurchase();
         this.setState({
           cashBalance: updatedCashBalance.toFixed(2),
           portfolioValue: updatePortfolioValue.toFixed(2)
@@ -90,31 +93,34 @@ class StockSearch extends Component {
     };    
   };
   
+  refreshStockSearch = () => {
+    window.location.reload();
+  }
+
   render() {
-    return this.state.loading ? null :  
+    return this.state.loading ? <div id='stock-search' />  :  
       <div id='stock-search'>      
         <form id='stock-search-form' onSubmit={this.onSubmit}>
           <label>
-            <h5>Your current cash balance is ${this.state.cashBalance}</h5>
-            <h5>Your portfolio value is ${this.state.portfolioValue}</h5>
-            <h5>Search a ticker to invest in!</h5>                      
-            <input className="stock-search-input ticker" type="text" name="ticker" placeholder="Ticker" />                          
+            <p>Your current cash balance is ${this.state.cashBalance}</p>            
+            <p>Search a stock to invest in!</p>                      
+            <input id="stock-search-input" className="stock-buy-input" type="text" name="ticker" placeholder="Ticker" />                          
           </label>
-          <input type="submit" name='submit' value="Submit" />
+          <input className="submit-btn" type="submit" name='submit' value="Submit" />
           <div id="stock-search-messages">
             <p id='missing-ticker-message'>Please enter a ticker</p>            
             <p id='display-message'>{this.state.displayMessage}</p>
           </div>                    
         </form> 
         <form id="buy-stock-form" onSubmit={this.onBuy}>
-            <input type="number" name="quantity" placeholder="Qty" />
-            <input type="submit" name="buy" value="Buy" />
-            <p id='missing-quantity-message'>Please enter a quantity</p>
-            <p id='cant-afford-message'>Sorry, you don't have enough cash in your 
-            account to buy that many shares of {this.state.currentTicker}</p>
-            <p id='success-buy-message'>Sorry, you don't have enough cash in your 
-            account to buy that many shares of {this.state.currentTicker}</p>
+            <input className="stock-buy-input" type="number" name="quantity" placeholder="Qty" />
+            <input className="submit-btn" type="submit" name="buy" value="Buy" />
+            <p id='missing-quantity-message'>Please enter a quantity</p>            
         </form>       
+          <p id='cant-afford-message'>Sorry, you don't have enough cash in your 
+          account to buy that many shares of {this.state.currentTicker}</p>
+          <p id='success-buy-message'>Your puchase of {this.state.currentTicker} stock is successful!</p>
+          <button className="submit-btn" id="refresh-btn" onClick={this.refreshStockSearch}>Search another stock!</button>
       </div>  
   }
 }

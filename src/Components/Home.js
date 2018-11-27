@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router';
 import { auth } from "../Firebase/firebase";
 import Portfolio from './Portfolio';
 import StockSearch from './StockSearch';
+import { Loader } from 'semantic-ui-react'
 
 class Home extends Component {
   constructor(props) {
@@ -36,13 +37,17 @@ class Home extends Component {
     this._isMounted = false;
   }
 
+  refreshPortfolio = () => {    
+    this.setState(this.state)
+  };
+
   render() {    
     return this.state.loading ? null :
       <div>
         <NavBar page="stock-search" currentUser={this.state.currentUser}/>
         <div id="portfolio-page">
           <Portfolio  />
-          <StockSearch />        
+          <StockSearch refreshComponent={this.refreshPortfolio} />        
         </div>
       </div>      
   }

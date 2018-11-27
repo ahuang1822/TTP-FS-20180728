@@ -40,6 +40,27 @@ export const getAccountInfo = async (email) => {
   }
 };
 
+// export const getAccountInfo = (email) => {
+//   const accountRef = db.collection('users').doc(email);
+//   accountRef.get()
+//   .then((accountDoc) => {
+//     if (!accountDoc.exists) {
+//       console.log('No such document!');
+//     } else {
+//       console.log('accuntdocdat: ', accountDoc.data())
+//       const cashBalance = accountDoc.data()['cash-balance']
+//       const portfolioValue = accountDoc.data()['portfolio-value']
+//       return {
+//         cashBalance: cashBalance.toFixed(2),
+//         portfolioValue: portfolioValue.toFixed(2)
+//       };
+//     };
+//   })
+//   .catch((error) => {
+//     console.error('Error getting account info: ', error);
+//   })
+// }
+
 export const searchStock = async(ticker) => {
   const IEX_API_PREFI = 'https://api.iextrading.com/1.0/stock/';    
   let stockData;
@@ -84,6 +105,20 @@ export const canUserAfford = (total, cashBalance) => {
   return true;
 } 
 
+export const successPurchase = () => {
+  const successPurchaseMessage = document.getElementById('success-buy-message');
+  const stockSearchFrom = document.getElementById('stock-search-form');
+  const buySearchFrom = document.getElementById('buy-stock-form');
+  const refreshButton = document.getElementById('refresh-btn');
+  const stockSearchInput = document.getElementById('stock-search-input');
+
+  stockSearchFrom.style.display = 'none';
+  buySearchFrom.style.display = 'none';
+  successPurchaseMessage.style.display = 'block';
+  refreshButton.style.display = 'block';
+  stockSearchInput.value = '';
+}
+
 export const addStockToTransaction = async (email, ticker, quantity, total) => {
   try {
     await db
@@ -117,6 +152,16 @@ export const updateAccount = async (email, cashBalance, portfolioValue) => {
     console.error("Error writing document: ", error);
   };  
 };
+
+export const refreshStockSearchForm = () => {
+  const successPurchaseMessage = document.getElementById('success-buy-message');
+  const stockSearchFrom = document.getElementById('stock-search-form');  
+  const refreshButton = document.getElementById('refresh-btn');
+  
+  stockSearchFrom.style.display = 'block';
+  successPurchaseMessage.style.display = 'none';
+  refreshButton.style.display = 'none';
+}
 
 export const getTransaction = async (email) => {
   const transactionsRef = db.collection('portfolios').doc(email).collection('transactions');
@@ -182,8 +227,10 @@ export const getPortfolio = async (email) => {
       });    
     });
     const stocksInPortfolioValue = [];
+    let portfolioTotalValue = 0;
     for (const stock of stocksInPortfolio) {
       const stockInfo = await searchStock(stock.ticker);
+      portfolioTotalValue += (stock.quantity * stockInfo.latestPrice);
       stocksInPortfolioValue.push({
         ticker: stock.ticker,
         quantity: stock.quantity,
@@ -192,7 +239,10 @@ export const getPortfolio = async (email) => {
         openPrice: stockInfo.openPrice
       })        
     }    
-    return stocksInPortfolioValue;   
+    return {
+      stocksInPortfolioValue: stocksInPortfolioValue,
+      portfolioTotalValue: portfolioTotalValue.toFixed(2)
+    };   
   } catch (error) {
     console.error('Error getting portfolio: ', error);
   };

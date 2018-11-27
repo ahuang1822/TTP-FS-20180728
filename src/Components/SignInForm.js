@@ -13,7 +13,7 @@ const SignInForm = (props) => {
       `}</style>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as='h2' color='teal' textAlign='center'>
+          <Header as='h2' textAlign='center'>
             Welcome to the Stock Portfolio App.
             <br />
             Please Sign into to your account.
@@ -29,7 +29,7 @@ const SignInForm = (props) => {
                 type='password'     
                 name='password'            
               />
-              <Button color='teal' fluid size='large'>
+              <Button fluid size='large'>
                 Sign In
               </Button>
               <p id='missing-name-message'>Please enter a name</p>

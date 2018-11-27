@@ -13,7 +13,7 @@ const SignUpForm = (props) => {
       `}</style>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as='h2' color='teal' textAlign='center'>
+          <Header as='h2' textAlign='center'>
             Please sign up with an email and password.
           </Header>
           <Form size='large' onSubmit={props.signUp}>
@@ -38,7 +38,7 @@ const SignUpForm = (props) => {
                 type='password'
                 name='password'
               />
-              <Button color='teal' fluid size='large'>
+              <Button fluid size='large'>
                 Sign Up
               </Button>
               <p id='missing-name-message'>Please enter a name</p>

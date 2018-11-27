@@ -1,7 +1,15 @@
 .ui.button.sign-up {
-  background: #f8f8f9; 
   padding: 0;
-  color: #00b5ad;
+  background-color: #f8f8f9;
+  color: #5EC37C;
+}
+
+.ui.center.aligned.header, .ui.centered.header {
+  color: #5EC37C;
+}
+
+.sign-up {
+  background: none;
 }
 
 #missing-name-message {
@@ -43,7 +51,7 @@
 }
 
 #navbar {
-  background-color: grey;
+  background-color: #5EC37C;
   height: 100px;
   display: flex;
 }
@@ -72,11 +80,15 @@ h1 {
   margin: 0 auto;
   flex: 1;
   font-size: 20px;
-  background: grey;
+  background-color: #5EC37C
+}
+
+.ui.fluid.button {
+  background-color: #5EC47C;
 }
 
 #portfolio-page {
-  display: flex;
+  display: flex;   
 }
 
 #portfolio {
@@ -86,13 +98,33 @@ h1 {
 #stock-search {
   flex: 1;
   margin: 0 auto;
-  border: #00b5ad;
+  border: #5EC37C;
   height: 600px;
 }
 
 input {
   display: block;
   margin: 5px auto;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  /* border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical; */
+}
+
+.stock-buy-input {
+  -webkit-appearance: none;
+  border: 0;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  padding: 12px 0;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 2px solid #C8CCD4;
+  background: none;
+  border-radius: 0;
+  color: #223254;
+  transition: all .15s ease;  
 }
 
 #stock-search-form {
@@ -109,6 +141,8 @@ h5 {
 
 p {
   text-align: center;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-size: 16px;
 }
 
 #buy-stock-form {
@@ -131,6 +165,7 @@ p {
   display: none;
   text-align: center;
   color: green;
+  margin: 75px 0px 15px auto;
 }
 
 li {
@@ -161,4 +196,29 @@ li {
 #portfolio {
   margin: 75px auto 5px;
   width: 300px;
+}
+
+#refresh-btn {
+  margin: 0 auto;
+  display: none;
+}
+
+.loader {
+  display: block;  
+  margin: 75px auto 5px;
+}
+
+#portfolio-heading {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-size: 20px;
+}
+
+.submit-btn {
+  width: 175px;
+  height: 30px;
+  border-radius: 0%;
+}
+
+Header {
+  color: #5EC37C;
 }
