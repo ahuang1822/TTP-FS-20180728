@@ -25,14 +25,14 @@ class NavBar extends Component {
     browserHistory.push('/');
   }
 
-  render() {
+  render() {    
     let leftBtn;
     if (this.state.page === 'transaction') {
       leftBtn  = <Button className="btn" onClick={this.goToStockSearch}>Portfolio</Button> 
     } else {
       leftBtn = <Button className="btn" onClick={this.goToTransactions}>Transactions</Button>
-    }
-
+    } 
+    
     return (
       <div id="navbar">
         <div id="navbar-left" />

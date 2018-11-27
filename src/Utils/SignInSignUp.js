@@ -66,7 +66,7 @@ export const signUpWithFirebase = (name, email, password) => {
   auth.createUserWithEmailAndPassword(email, password)
   .then(async () => {
     await addUser(email, name);
-    auth.currentUser.updateProfile({ displayName: name })
+    await auth.currentUser.updateProfile({ displayName: name })
     browserHistory.push('/portfolio');
   })
   .catch((error) => {      

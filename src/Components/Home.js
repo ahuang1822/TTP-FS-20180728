@@ -40,8 +40,7 @@ class Home extends Component {
     this.setState(this.state)
   };
 
-  render() {    
-    console.log('currentUSer: ', this.state.currentUser)
+  render() {        
     return this.state.loading ? null :
       <div>
         <NavBar page="stock-search" currentUser={this.state.currentUser}/>
