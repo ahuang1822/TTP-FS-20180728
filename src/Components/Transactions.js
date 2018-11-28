@@ -28,7 +28,7 @@ class Transcations extends Component {
   render() {    
     return this.state.loading ? <div /> :
       <div>
-        <h1 id="no-transcation">{ this.state.noTransaction }</h1>
+        <p id="no-transcation">{ this.state.noTransaction }</p>
         <ol>        
           {this.state.transactions.map((transaction, index) => {            
             return (

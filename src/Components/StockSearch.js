@@ -28,13 +28,12 @@ class StockSearch extends Component {
   };
   
   componentDidMount = async () => {    
-    getAccountInfo(auth.currentUser.email)
-    .then((accountInfo) => {
-      this.setState({
-        loading: false,
-        cashBalance: accountInfo.cashBalance || 5000,
-      });
-    });    
+    const email = auth.currentUser.email;
+    const accountInfo = await getAccountInfo(email);    
+    this.setState({
+      loading: false,
+      cashBalance: accountInfo.cashBalance
+    });
   };
   
   onSubmit = async (event) => {
